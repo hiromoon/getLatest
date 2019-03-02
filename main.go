@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/urfave/cli"
 
@@ -17,8 +18,19 @@ func main() {
 	app := cli.NewApp()
 	app.Name = "glv"
 	app.Usage = "get the latest version from github.com"
+	app.Flags = []cli.Flag{
+		cli.StringFlag{
+			Name:  "repo",
+			Value: "erlang/otp",
+			Usage: "Specify Repository.",
+		},
+	}
 	app.Action = func(c *cli.Context) error {
-		res := github.Fetch("erlang", "otp")
+		arg := strings.Split(c.String("repo"), "/")
+		owner := arg[0]
+		repo := arg[1]
+
+		res := github.Fetch(owner, repo)
 		checker := &checkers.SemanticVersionChecker{
 			Parser: &parsers.ErlangVersionParser{},
 		}
