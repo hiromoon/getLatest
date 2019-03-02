@@ -31,8 +31,15 @@ func main() {
 		repo := arg[1]
 
 		res := github.Fetch(owner, repo)
-		checker := &checkers.SemanticVersionChecker{
-			Parser: &parsers.ErlangVersionParser{},
+		var checker *checkers.SemanticVersionChecker
+		if owner == "erlang" {
+			checker = &checkers.SemanticVersionChecker{
+				Parser: &parsers.ErlangVersionParser{},
+			}
+		} else if owner == "elixir-lang" {
+			checker = &checkers.SemanticVersionChecker{
+				Parser: &parsers.ElixirVersionParser{},
+			}
 		}
 		tag := res.GetLatestTag(checker)
 		b, err := json.Marshal(tag)
