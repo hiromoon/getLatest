@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -42,11 +41,7 @@ func main() {
 			}
 		}
 		tag := res.GetLatestTag(checker)
-		b, err := json.Marshal(tag)
-		if err != nil {
-			return err
-		}
-		fmt.Println(string(b))
+		fmt.Println(tag.Name)
 		return nil
 	}
 
