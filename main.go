@@ -24,6 +24,7 @@ func main() {
 			Usage: "Specify Repository.",
 		},
 	}
+	app.Version = "0.1.0"
 	app.Action = func(c *cli.Context) error {
 		r := c.String("repo")
 		arg := strings.Split(r, "/")
