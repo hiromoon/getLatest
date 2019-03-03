@@ -25,7 +25,11 @@ func main() {
 		},
 	}
 	app.Action = func(c *cli.Context) error {
-		arg := strings.Split(c.String("repo"), "/")
+		r := c.String("repo")
+		arg := strings.Split(r, "/")
+		if len(arg) < 2 {
+			return fmt.Errorf("Invalid repository name: ", r)
+		}
 		owner := arg[0]
 		repo := arg[1]
 

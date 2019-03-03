@@ -33,5 +33,40 @@ func (checker *SemanticVersionChecker) Check(nowVersion, newVersion string) bool
 		return false
 	}
 	// Compair patch version, if equals major and minor version.
-	return nowV.Patch < newV.Patch
+	if nowV.Patch < newV.Patch {
+		return true
+	}
+
+	if nowV.Patch > newV.Patch {
+		return false
+	}
+
+	if !nowV.IsAlpha() && !nowV.IsBeta() && !nowV.IsRC() {
+		return false
+	}
+
+	if !newV.IsAlpha() && !newV.IsBeta() && !newV.IsRC() {
+		return true
+	}
+
+	if !nowV.IsRC() && newV.IsRC() {
+		return true
+	}
+
+	if nowV.IsRC() && newV.IsRC() {
+		return nowV.RC < newV.RC
+	}
+
+	if !nowV.IsBeta() && newV.IsBeta() {
+		return true
+	}
+
+	if nowV.IsBeta() && newV.IsBeta() {
+		return nowV.Beta < newV.Beta
+	}
+
+	if !nowV.IsAlpha() && newV.IsAlpha() {
+		return true
+	}
+	return nowV.Alpha < newV.Alpha
 }

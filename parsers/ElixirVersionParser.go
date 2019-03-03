@@ -34,9 +34,45 @@ func (p *ElixirVersionParser) Parse(version string) *models.Version {
 	if err != nil {
 		panic(err)
 	}
+	var alpha int
+	var beta int
+	var rc int
+	switch v[0][5] {
+	case "alpha":
+		a, err := strconv.Atoi(v[0][6])
+		if err != nil {
+			panic(err)
+		}
+		alpha = a
+		beta = -1
+		rc = -1
+	case "beta":
+		b, err := strconv.Atoi(v[0][6])
+		if err != nil {
+			panic(err)
+		}
+		alpha = -1
+		beta = b
+		rc = -1
+	case "rc":
+		r, err := strconv.Atoi(v[0][6])
+		if err != nil {
+			panic(err)
+		}
+		alpha = -1
+		beta = -1
+		rc = r
+	default:
+		alpha = -1
+		beta = -1
+		rc = -1
+	}
 	return &models.Version{
 		Major: major,
 		Minor: minor,
 		Patch: patch,
+		Alpha: alpha,
+		Beta:  beta,
+		RC:    rc,
 	}
 }
